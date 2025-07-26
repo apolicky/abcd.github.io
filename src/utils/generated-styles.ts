@@ -1,13 +1,10 @@
 import { ColorPaletteId, colorPalettes, getColorIndexBasedOnProbability } from "./color-palette";
 import { fonts } from "./fonts";
 import { getRandomNumber } from "./random";
+import { type ResizeFactor } from "./resize-factor";
 
-export const getRandomStyle = (colorPaletteId: ColorPaletteId) => {
-    const translate = () => {
-        return getRandomNumber() * (30 - 3) + 3;
-    };
-
-    const scale = getScaleBasedOnProbability();
+export const getRandomStyle = (colorPaletteId: ColorPaletteId, resizeFactor: ResizeFactor) => {
+    const scale = getScaleBasedOnProbability(resizeFactor.max, resizeFactor.min);
     const randomFont = fonts[Math.floor(getRandomNumber() * fonts.length)];
     const palette = colorPalettes[colorPaletteId];
     const colorIndex = getColorIndexBasedOnProbability();
@@ -21,8 +18,8 @@ export const getRandomStyle = (colorPaletteId: ColorPaletteId) => {
     } as React.CSSProperties;
 };
 
-export const getScaleBasedOnProbability = () => {
-    const randomValue = getRandomNumber() * (1 - 0.8) + 0.8;
+export const getScaleBasedOnProbability = (max: number = 1, min: number = 0.8) => {
+    const randomValue = getRandomNumber() * (max - min) + min;
     if (randomValue <= 0.7) {
         return randomValue * 1;
     } else if (randomValue <= 0.91) {
@@ -34,4 +31,8 @@ export const getScaleBasedOnProbability = () => {
     } else {
         return randomValue * 8;
     }
+};
+
+const translate = () => {
+    return getRandomNumber() * (30 - 3) + 3;
 };

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { generateLetters, selectMissingLetter } from "./generated-letters";
 import { getRandomStyle } from "./generated-styles";
 import { randomColorPaletteId } from "./color-palette";
+import { getResizeFactor } from "./resize-factor";
 
 export const useMissingLetter = (initialMissingLetter: string) => {
     const [missingLetter, setMissingLetter] = useState<string>(initialMissingLetter);
@@ -9,10 +10,11 @@ export const useMissingLetter = (initialMissingLetter: string) => {
     const [styledLetters, setStyledLetters] = useState<JSX.Element[]>([]);
 
     const generateStyledLetters = (excludedLetter: string) => {
+        const resizeFactor = getResizeFactor();
         const generated = generateLetters(excludedLetter);
         const colorPaletteId = randomColorPaletteId();
         return generated.map((letter, index) => (
-            <span key={index} style={getRandomStyle(colorPaletteId)}>
+            <span key={index} style={getRandomStyle(colorPaletteId, resizeFactor)}>
                 {letter}
             </span>
         ));
